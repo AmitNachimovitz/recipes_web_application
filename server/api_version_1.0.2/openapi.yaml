@@ -1,0 +1,572 @@
+openapi: 3.0.0
+info:
+  title: Recipes API
+  description: This is an API to rcipes app
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.2
+servers:
+- url: https://localhost:3000
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: auth
+  description: all authetication routes (registration and login)
+- name: recipes
+  description: all recipes general info
+- name: users
+  description: all user personal zone - personal and families recipes
+paths:
+  /recipes/searchRecipeByName:
+    get:
+      tags:
+      - recipes
+      summary: get recipe
+      description: |
+        get recipe by name
+      parameters:
+      - name: recipeName
+        in: query
+        description: pass name string to search
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: number
+        in: query
+        description: the numbers of items to return
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: "5"
+          enum:
+          - "5"
+          - "10"
+          - "15"
+      - name: cuisine
+        in: query
+        description: pass cuisine type to filter by
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Cuisine'
+      - name: diet
+        in: query
+        description: pass diet type to filter by
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Diet'
+      - name: intolerance
+        in: query
+        description: pass intolerance type to filter by
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Intolerance'
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/recipePreview'
+        "204":
+          description: No recipes found
+        "500":
+          description: Internal server error
+  /recipes/getInstructionsForRecipe:
+    get:
+      tags:
+      - recipes
+      summary: get instructions for recipe
+      description: |
+        get instructions for recipe by recipe id
+      parameters:
+      - name: recipeId
+        in: query
+        description: pass recipeId to search instructions
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/recipeInstructions'
+        "500":
+          description: Internal server error
+  /recipes/getRandomRecipes:
+    get:
+      tags:
+      - recipes
+      summary: get random recipes
+      description: |
+        get three random recipes for user
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/recipePreview'
+        "500":
+          description: Internal server error
+  /users/getUserFavoriteRecipes:
+    get:
+      tags:
+      - users
+      summary: get user favorite recipes
+      description: |
+        get favorite recipes of user by userId
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/recipePreview'
+        "500":
+          description: Internal server error
+      security:
+      - cookieAuth: []
+  /users/getUserRecipesData:
+    get:
+      tags:
+      - users
+      summary: get user recipes data
+      description: |
+        get data on user - check if the user watced the recipes and if it's define as favorite
+      parameters:
+      - name: recipes_ids
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: get data on user's recipes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/recipeUserData'
+        "500":
+          description: Internal server error
+      security:
+      - cookieAuth: []
+  /users/getLastVisitedRecipes:
+    get:
+      tags:
+      - users
+      summary: get last recipes
+      description: |
+        get three last recipes viewed by user
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/recipePreview'
+        "204":
+          description: No content
+        "500":
+          description: Internal server error
+      security:
+      - cookieAuth: []
+  /users/getUserFamilyRecipes:
+    get:
+      tags:
+      - users
+      summary: get family recipes
+      description: |
+        get family recipes by username
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/familyRecipe'
+        "500":
+          description: Internal server error
+      security:
+      - cookieAuth: []
+  /users/getUserPersonalRecipes:
+    get:
+      tags:
+      - users
+      summary: get personal recipes
+      description: |
+        get personal recipes by username
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/personalRecipe'
+        "500":
+          description: Internal server error
+      security:
+      - cookieAuth: []
+  /users/addFavoriteRecipe:
+    post:
+      tags:
+      - users
+      summary: add recipe to favorites
+      description: add recipe to favorite recipes list
+      requestBody:
+        description: insert recipe id
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "547865"
+      responses:
+        "201":
+          description: recipe added to favorite
+        "500":
+          description: Internal server error
+      security:
+      - cookieAuth: []
+  /users/addWatchedRecipe:
+    post:
+      tags:
+      - users
+      summary: add recipe to watched recipes
+      description: add recipe to watched recipes list
+      requestBody:
+        description: insert recipe id
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "547865"
+      responses:
+        "201":
+          description: add to watched recipes
+        "500":
+          description: Internal server error
+      security:
+      - cookieAuth: []
+  /register:
+    post:
+      tags:
+      - auth
+      summary: register user
+      description: Register new user to the app
+      requestBody:
+        description: insert user details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users'
+      responses:
+        "201":
+          description: user created
+        "409":
+          description: User name is already exists. Please choose a new one.
+        "500":
+          description: Internal server error
+  /login:
+    post:
+      tags:
+      - auth
+      summary: login user
+      description: login user to the app
+      requestBody:
+        description: insert username and password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "200":
+          description: "login succeeded The session ID is returned in a cookie named\
+            \ 'session',  which need to be included in subsequent requests. \n"
+          headers:
+            Set-cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: session=NKjbYlhiRrSZ2eJK5_PfyA
+        "401":
+          description: Username or Password incorrect
+        "500":
+          description: Internal server error
+  /logout:
+    post:
+      tags:
+      - auth
+      summary: logout user
+      description: logout user from the app
+      responses:
+        "200":
+          description: logout succeeded
+        "500":
+          description: Internal server error
+components:
+  schemas:
+    users:
+      type: object
+      properties:
+        username:
+          type: string
+          example: jessyS
+        firstName:
+          type: string
+          example: jessy
+        lastName:
+          type: string
+          example: smith
+        country:
+          type: string
+          example: Austria
+        password:
+          type: string
+          example: jess57368!
+        email:
+          type: string
+          example: jessysmith@gmail.com
+        imgURL:
+          type: string
+          example: cloudinary.com
+    personalRecipe:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          id:
+            type: string
+            example: "215435"
+          name:
+            type: string
+            example: lasagna
+          readyInMinutes:
+            type: integer
+            example: 40
+          aggregateLikes:
+            type: integer
+            example: 512
+          vegetarian:
+            type: boolean
+            example: true
+          vegan:
+            type: boolean
+            example: false
+          glutenFree:
+            type: boolean
+            example: true
+          image:
+            type: string
+            example: cloudinary.com
+          ingredients:
+            $ref: '#/components/schemas/recipeIngredients'
+          instructions:
+            $ref: '#/components/schemas/recipeInstructions'
+    familyRecipe:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          id:
+            type: string
+            example: "215435"
+          name:
+            type: string
+            example: lasagna
+          author:
+            type: string
+            example: Mother
+          whenPrepared:
+            type: string
+            example: Every friday dinner
+          readyInMinutes:
+            type: integer
+            example: 40
+          aggregateLikes:
+            type: integer
+            example: 512
+          vegetarian:
+            type: boolean
+            example: true
+          vegan:
+            type: boolean
+            example: false
+          glutenFree:
+            type: boolean
+            example: true
+          image:
+            type: string
+            example: cloudinary.com
+          ingredients:
+            $ref: '#/components/schemas/recipeIngredients'
+          instructions:
+            $ref: '#/components/schemas/recipeInstructions'
+    recipeUserData:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          recipeId:
+            type: string
+            example: "215435"
+          isWatched:
+            type: boolean
+            example: true
+          isFavorite:
+            type: boolean
+            example: false
+    recipePreview:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "215435"
+        name:
+          type: string
+          example: lasagna
+        readyInMinutes:
+          type: integer
+          example: 40
+        aggregateLikes:
+          type: integer
+          example: 512
+        vegetarian:
+          type: boolean
+          example: true
+        vegan:
+          type: boolean
+          example: false
+        glutenFree:
+          type: boolean
+          example: true
+        image:
+          type: string
+          example: cloudinary.com
+        servings:
+          type: integer
+          example: 6
+        ingredients:
+          $ref: '#/components/schemas/recipeIngredients'
+    recipeIngredients:
+      type: array
+      items:
+        $ref: '#/components/schemas/recipeIngredients_inner'
+    recipeInstructions:
+      type: array
+      items:
+        $ref: '#/components/schemas/recipeInstructions_inner'
+    Cuisine:
+      type: string
+      enum:
+      - African
+      - American
+      - British
+      - Cajun
+      - Caribbean
+      - Chinese
+      - Eastern European
+      - European
+      - French
+      - German
+      - Greek
+      - Indian
+      - Irish
+      - Italian
+      - Japanese
+      - Jewish
+      - Korean
+      - Latin American
+      - Mediterranean
+      - Mexican
+      - Middle Eastern
+      - Nordic
+      - Southern
+      - Spanish
+      - Thai
+      - Vietnamese
+    Diet:
+      type: string
+      enum:
+      - Gluten Free
+      - Ketogenic
+      - Vegetarian
+      - Lacto-Vegetarian
+      - Ovo-Vegetarian
+      - Vegan
+      - Pescetarian
+      - Paleo
+      - Primal
+      - Whole30
+    Intolerance:
+      type: string
+      enum:
+      - Dairy
+      - Egg
+      - Gluten
+      - Grain
+      - Peanut
+      - Seafood
+      - Sesame
+      - Shellfish
+      - Soy
+      - Sulfite
+      - Tree Nut
+      - Wheat
+    body:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    recipeIngredients_inner:
+      type: object
+      properties:
+        name:
+          type: string
+          example: butter
+        amount:
+          type: string
+          example: 150 g
+    recipeInstructions_inner:
+      type: object
+      properties:
+        number:
+          type: integer
+          example: 2
+        step:
+          type: string
+          example: Whisk together the flour, pecans, granulated sugar, light brown
+            sugar, baking powder, baking soda, and salt in a medium bowl.
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      name: session
+      in: cookie
