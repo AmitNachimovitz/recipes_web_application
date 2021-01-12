@@ -28,3 +28,13 @@ npm run dev
 ```
 
 ### Screenshots
+![Capture1](https://user-images.githubusercontent.com/49063232/104324033-90e86b80-54ef-11eb-9ac4-5ed8887e4b6e.JPG)
+![Capture2](https://user-images.githubusercontent.com/49063232/104324037-91810200-54ef-11eb-8fee-157d3acac00b.JPG)
+
+
+![Capture3](https://user-images.githubusercontent.com/49063232/104324039-92199880-54ef-11eb-8525-62c7a202b511.JPG)
+
+
+![Capture4](https://user-images.githubusercontent.com/49063232/104324040-92b22f00-54ef-11eb-81ed-9756a22f1099.JPG)
+![Capture5](https://user-images.githubusercontent.com/49063232/104324044-934ac580-54ef-11eb-9118-b2bb573a732b.JPG)
+![Capture6](https://user-images.githubusercontent.com/49063232/104324046-934ac580-54ef-11eb-97c9-5a9814f62979.JPG)
