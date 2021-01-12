@@ -26,3 +26,9 @@ npm install
 ```
 npm run dev
 ```
+
+### Screenshots
+![Capture](https://user-images.githubusercontent.com/49063232/104313524-d0f42200-54e0-11eb-9cf9-2373d212d25b.JPG)
+![Capture1](https://user-images.githubusercontent.com/49063232/104313530-d2254f00-54e0-11eb-8bfa-ba73147c7724.JPG)
+![Capture3](https://user-images.githubusercontent.com/49063232/104313533-d2bde580-54e0-11eb-85a1-908abd99ec42.JPG)
+![Capture4](https://user-images.githubusercontent.com/49063232/104313535-d2bde580-54e0-11eb-891f-5ac715e8ed69.JPG)
