@@ -1,10 +1,11 @@
 # coronacipes
 
 ## Info
-This is the implementation of our frontend for our recipes web application. 
-We used spoonacular food API and integrate it into our server.
-To implement this project, we used a stack that includes Node.js for the backend, 
-Vue framework for the frontend, and MSSQL for the database.
+This project was build during the course "Web Development Enviermont"
+of Software and Information System Engineering at Ben-Gurion University.
+This is a full-stack web application that uses spoonacular API that we integrate into the server for retrieving recipes using different search options.
+The stack includes Node.Js with Express framework for the server and Microsoft SQL in Azure for the DB.
+The frontend of the app build using Vue.Js framework.
 
 ### Authors
 
@@ -16,6 +17,8 @@ Furthermore, they can have an option to save their favorite recipes so they can 
 
 ### Project setup
 ```
+npm install
+cd server
 npm install
 ```
 
